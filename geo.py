@@ -24,7 +24,7 @@ class Geo:
             self.y = self.y + self.delta
         if direction == "up":
             self.y = self.y - 3
-            self.x = self.x +5
+            #self.x = self.x + 2
 
         self.rect = pygame.Rect(self.x, self.y, self.image_size[0], self.image_size[1])
 
