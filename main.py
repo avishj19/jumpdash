@@ -3,6 +3,7 @@ import random
 from geo import Geo
 from obstacle import Obstacle
 from button import Button
+from bluegeo import Bluegeo
 
 # set up pygame modules
 pygame.init()
@@ -13,14 +14,16 @@ pygame.display.set_caption("Jump Dash")
 # set up variables for the display
 size = (1000, 600)
 screen = pygame.display.set_mode(size)
-gam_start_screen = True
+game_start_screen = True
+choose_sprite = True
 game = True
 
 obstacles = []
 bg = pygame.image.load("background.png")
 g = Geo(0,400)
 t = Obstacle(300,400)
-b = Button(20,400)
+b = Button(290,220)
+bl = Bluegeo(0,400)
 
 x = 300
 y = 400
@@ -37,7 +40,7 @@ print(obstacles)
 start_game_message = my_font.render("testing",True,(0,0,255))
 # -------- Main Program Loop -----------
 
-while gam_start_screen:
+while game_start_screen:
     screen.blit(bg,(0,0))
     screen.blit(start_game_message,(100,100))
     screen.blit(b.image,b.rect)
@@ -45,10 +48,29 @@ while gam_start_screen:
 
     for event in pygame.event.get():  # User did something
         if event.type == pygame.QUIT:  # If user clicked close
-            gam_start_screen = False
+            game_start_screen = False
+            choose_sprite = False
             game = False
         elif event.type == pygame.MOUSEBUTTONUP:
-            gam_start_screen = False
+            if b.rect.collidepoint(event.pos):
+             game_start_screen = False
+             #choose_sprite = True
+
+while choose_sprite:
+    screen.blit(bg, (0, 0))
+    screen.blit(g.image,(200,300))
+    screen.blit(bl.image,(300,300))
+    pygame.display.update()
+
+    for event in pygame.event.get():  # User did something
+        if event.type == pygame.QUIT:  # If user clicked close
+            game_start_screen = False
+            choose_sprite = False
+            game = False
+        elif event.type == pygame.MOUSEBUTTONUP:
+               choose_sprite = False
+              # game = True
+
 while game:
     for event in pygame.event.get():  # User did something
         if event.type == pygame.QUIT:  # If user clicked close
