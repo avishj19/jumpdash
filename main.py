@@ -17,13 +17,15 @@ screen = pygame.display.set_mode(size)
 game_start_screen = True
 choose_sprite = True
 game = True
+bl_sprite = False
+g_sprite = False
 
 obstacles = []
 bg = pygame.image.load("background.png")
-g = Geo(0,400)
+g = Geo(200,200)
 t = Obstacle(300,400)
 b = Button(290,220)
-bl = Bluegeo(0,400)
+bl = Bluegeo(300,300)
 
 x = 300
 y = 400
@@ -58,8 +60,8 @@ while game_start_screen:
 
 while choose_sprite:
     screen.blit(bg, (0, 0))
-    screen.blit(g.image,(200,300))
-    screen.blit(bl.image,(300,300))
+    screen.blit(g.image,g.rect)
+    screen.blit(bl.image,bl.rect)
     pygame.display.update()
 
     for event in pygame.event.get():  # User did something
@@ -68,8 +70,14 @@ while choose_sprite:
             choose_sprite = False
             game = False
         elif event.type == pygame.MOUSEBUTTONUP:
-               choose_sprite = False
-              # game = True
+            if bl.rect.collidepoint(event.pos):
+                bl_sprite = True
+                choose_sprite = False
+            if g.rect.collidepoint(event.pos):
+                g_sprite = True
+                choose_sprite = False
+
+
 
 while game:
     for event in pygame.event.get():  # User did something
@@ -78,9 +86,13 @@ while game:
     keys = pygame.key.get_pressed() # Balloon movement
     if keys[pygame.K_SPACE]:
         g.move_geo("up")
+        bl.move_geo("up")
 
     screen.blit(bg, (0, 0))  # Background
-    screen.blit(g.image, g.rect)
+    if g_sprite == True:
+        screen.blit(g.image,(10,400))
+    if bl_sprite == True:
+        screen.blit(bl.image,(10,400))
     for t in obstacles:
         screen.blit(t.image,t.rect)
     pygame.display.update()
