@@ -22,9 +22,11 @@ class Geo:
         scale_size = (self.image_size[0] * .2, self.image_size[1] * .2)
         self.image = pygame.transform.scale(self.image, scale_size)
 
-    def move_geo(self,):
+    def move_geo(self):
        self.y_postion -= self.y_velocity
        self.y_velocity -= self.Y_gravity
+
        self.rect = pygame.Rect(self.x, self.y, self.image_size[0], self.image_size[1])
+
 
 

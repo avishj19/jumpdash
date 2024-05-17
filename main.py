@@ -24,11 +24,12 @@ s_sprite = False
 
 obstacles = []
 bg = pygame.image.load("background.png")
-g = Geo(200,200)
+sbg = pygame.image.load("startscreen.png")
+g = Geo(200,300)
 t = Obstacle(300,400)
-b = Button(290,220)
-bl = Bluegeo(300,300)
-sg = Scarygeo(250,500)
+b = Button(320,180)
+bl = Bluegeo(400,300)
+sg = Scarygeo(300,300)
 
 x = 300
 y = 400
@@ -39,16 +40,16 @@ for i in range(5):
     #y += 100
 
 print(obstacles)
-#backgound_music = pygame.mixer_music.load("music.mp3")
-#pygame.mixer.music.play(-1)
+backgound_music = pygame.mixer_music.load("music.mp3")
+pygame.mixer.music.play(-1)
 # Render the text later
-start_game_message = my_font.render("testing",True,(0,0,255))
+start_game_message = my_font.render("Jump Dash",True,(3, 236, 252))
 choose_sprite_text = my_font.render("Choose your sprite to play with",True,(3, 236, 252))
 # -------- Main Program Loop -----------
 
 while game_start_screen:
-    screen.blit(bg,(0,0))
-    screen.blit(start_game_message,(100,100))
+    screen.blit(sbg,(0,0))
+    screen.blit(start_game_message,(320,30))
     screen.blit(b.image,b.rect)
     pygame.display.update()
 
