@@ -152,11 +152,18 @@ while game:
 
     if g_sprite:
         g.move_geo()
+    if bl_sprite:
+        bl.move_geo()
 
     if not g.move_geo():
         g.x_position = g.x_position + 5
         if g.x_position >= 1000:
             g.x_position = 0
+
+    if not bl.move_geo():
+        bl.x_position = bl.x_position +5
+        if bl.x_position >= 1000:
+            bl.x_position = 0
 
     for t in obstacles:
         if g.rect.colliderect(t.rect):
@@ -166,7 +173,7 @@ while game:
     if g_sprite == True and not sprite_collide:
       screen.blit(g.image,(g.x_position,g.y_position))
     if bl_sprite == True:
-        screen.blit(bl.image,(10,400))
+        screen.blit(bl.image,(bl.x_position,bl.y_position))
     if s_sprite == True:
         screen.blit(sg.image,(10,400))
     for t in obstacles:
