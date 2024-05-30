@@ -10,6 +10,7 @@ from classicalbutton import Classicalbutton
 from rapbutton import Rapbutton
 from backbutton import Backbutton
 from fowardbutton import Fowardbutton
+import time
 
 # set up pygame modules
 pygame.init()
@@ -36,13 +37,14 @@ sbg = pygame.image.load("startscreen.png")
 g = Geo(10,400)
 t = Obstacle(300,400)
 b = Button(320,180)
-bl = Bluegeo(400,300)
-sg = Scarygeo(300,300)
+bl = Bluegeo(500,300)
+sg = Scarygeo(200,300)
 mb = Muiscbutton(600,200)
 cb = Classicalbutton(100,300)
 rb = Rapbutton(600,330)
 bb = Backbutton(10,10)
 fb = Fowardbutton(800,8)
+start_time = time.time()
 
 x = 300
 y = 400
@@ -119,7 +121,7 @@ while choose_sprite:
     screen.blit(bg, (0, 0))
     screen.blit(choose_sprite_text,(130,50))
     screen.blit(g.image,g.rect)
-    screen.blit(bl.image,bl.rect)
+    #screen.blit(bl.image, )
     screen.blit(sg.image,sg.rect)
     pygame.display.update()
 
@@ -143,17 +145,24 @@ while choose_sprite:
 clock = pygame.time.Clock()
 
 while game:
-    for event in pygame.event.get():  # User did something
-        if event.type == pygame.QUIT:  # If user clicked close
-            game = False
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
-                g.jump()
+    
+    current_time = time.time()
+    run_time = current_time - start_time
+    display_time = my_font2.render("Timer: " + str(round(run_time,2)), True, (0,255,0))
+    
+   # for event in pygame.event.get():  # User did something
+       # if event.type == pygame.QUIT:  # If user clicked close
+         #   game = False
+    #    if event.type == pygame.KEYDOWN:
+        #    if event.key == pygame.K_SPACE and not sprite_collide:
+          #      g.jump()
 
     if g_sprite:
         g.move_geo()
     if bl_sprite:
         bl.move_geo()
+    if s_sprite:
+        sg.move_geo()
 
     if not g.move_geo():
         g.x_position = g.x_position + 5
@@ -165,28 +174,40 @@ while game:
         if bl.x_position >= 1000:
             bl.x_position = 0
 
+    if not sg.move_geo():
+        sg.x_position = sg.x_position + 5
+        if sg.x_position >= 1000:
+            sg.x_position = 0
+
     for t in obstacles:
-        if g.rect.colliderect(t.rect):
+        if g.rect.colliderect(t.rect) or bl.rect.colliderect(t.rect) or sg.rect.colliderect(t.rect):
             sprite_collide = True
 
     screen.blit(bg, (0, 0))  # Background
     if g_sprite == True and not sprite_collide:
       screen.blit(g.image,(g.x_position,g.y_position))
-    if bl_sprite == True:
-        screen.blit(bl.image,(bl.x_position,bl.y_position))
+    #if bl_sprite == True:
+       # screen.blit(bl.image,(bl.x_position,bl.y_position))
     if s_sprite == True:
         screen.blit(sg.image,(10,400))
     for t in obstacles:
         if not sprite_collide:
             screen.blit(t.image,t.rect)
+    if not sprite_collide:
+        screen.blit(display_time, (10,10))
 
     if sprite_collide:
         screen.blit(loose_message,(230,10))
         for event in pygame.event.get():
+            if event.type == pygame.QUIT:  # If user clicked close
+                game = False
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
+                if event.key == pygame.K_SPACE and not sprite_collide:
+                    g.jump()
+                elif event.key == pygame.K_SPACE and sprite_collide:
                     sprite_collide = False
                     g.x_position = 0
+                    start_time = time.time()
 
     pygame.display.update()
 
