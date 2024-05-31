@@ -12,13 +12,13 @@ class Scarygeo:
         self.rect = pygame.Rect(self.x_position, self.y_position , self.image_size[0], self.image_size[1])
         self.rect = self.image.get_rect(topleft=(self.x_position, self.y_position))
         self.gravity = 1
-        self.jump_height = 25
-        self.y_velocity = 3
+        self.jump_height = 15
+        self.y_velocity = 0
         self.on_ground = True
 
     def rescale_image(self, image):
         self.image_size = self.image.get_size()
-        scale_size = (self.image_size[0] * .2, self.image_size[1] * .2)
+        scale_size = (self.image_size[0] * .4, self.image_size[1] * .4)
         self.image = pygame.transform.scale(self.image, scale_size)
 
 
