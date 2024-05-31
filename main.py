@@ -39,13 +39,14 @@ sbg = pygame.image.load("startscreen.png")
 g = Geo(10,400)
 t = Obstacle(300,400)
 b = Button(320,180)
-bl = Bluegeo(400,300)
-sg = Scarygeo(300,300)
+bl = Bluegeo(480,390)
+sg = Scarygeo(890,400)
 mb = Muiscbutton(600,200)
 cb = Classicalbutton(100,300)
 rb = Rapbutton(600,330)
 bb = Backbutton(10,10)
 fb = Fowardbutton(800,8)
+score = 0
 
 x = 300
 y = 400
@@ -62,7 +63,12 @@ pygame.mixer.music.play(-1)
 start_game_message = my_font.render("Jump Dash",True,(3, 236, 252))
 choose_sprite_text = my_font.render("Choose your sprite to play with",True,(3, 236, 252))
 music_text = my_font.render("choose your music", True, (3, 236, 252))
+#score_message = my_font2.render("Score" + score, True, ((0, 255, 0))
 loose_message = my_font2.render("YOU LOST", True,(4,26,234))
+geo_message = my_font2.render("Geo Sprite", True, (3, 211, 252))
+bluegeo_message = my_font2.render("Blue Geo Sprite", True, (3, 211, 252))
+scarygeo_message = my_font2.render("Scary Geo Sprite", True, (3, 211, 252))
+
 # -------- Main Program Loop -----------
 
 while game_start_screen:
@@ -124,6 +130,9 @@ while choose_sprite:
     screen.blit(g.image,g.rect)
     screen.blit(bl.image,bl.rect)
     screen.blit(sg.image,sg.rect)
+    screen.blit(geo_message,(10, 200))
+    screen.blit(bluegeo_message, (480,200))
+    screen.blit(scarygeo_message,(880,200))
     pygame.display.update()
 
     for event in pygame.event.get():  # User did something
@@ -172,12 +181,13 @@ while game:
                     sprite_selected.jump()
 
     sprite_selected.move_geo()
-    sprite_selected.x_position = sprite_selected.x_position + 10
+    sprite_selected.x_position = sprite_selected.x_position + 5
     if sprite_selected.x_position >= 1000:
+        score = score + 1
         sprite_selected.x_position = 0
 
 
-    screen.blit(bg, (0, 0))  # Background
+    screen.blit(sbg, (0, 0))  # Background
 
     for t in obstacles:
         if sprite_selected.rect.colliderect(t.rect):

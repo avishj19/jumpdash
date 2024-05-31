@@ -13,7 +13,7 @@ class Geo:
         self.rect = pygame.Rect(self.x_position, self.y_position , self.image_size[0], self.image_size[1])
         self.rect = self.image.get_rect(topleft=(self.x_position, self.y_position))
         self.gravity = 1
-        self.jump_height = 15
+        self.jump_height = 20
         self.y_velocity = 0
         self.on_ground = True
 
