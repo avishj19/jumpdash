@@ -16,7 +16,7 @@ from fowardbutton import Fowardbutton
 pygame.init()
 pygame.font.init()
 my_font = pygame.font.SysFont('Nexa', 70)
-my_font2 = pygame.font.SysFont('Times new roman', 14)
+my_font2 = pygame.font.SysFont('Arial', 25)
 pygame.display.set_caption("Jump Dash")
 
 # set up variables for the display
@@ -35,12 +35,12 @@ start_time = time.time()
 
 obstacles = []
 bg = pygame.image.load("background.png")
-sbg = pygame.image.load("startscreen.png")
-g = Geo(10,400)
+sbg = pygame.image.load("../../Downloads/jumpdash-main 5/startscreen.png")
+g = Geo(30,400)
 t = Obstacle(300,400)
 b = Button(320,180)
 bl = Bluegeo(480,390)
-sg = Scarygeo(890,400)
+sg = Scarygeo(860,400)
 mb = Muiscbutton(600,200)
 cb = Classicalbutton(100,300)
 rb = Rapbutton(600,330)
@@ -48,12 +48,18 @@ bb = Backbutton(10,10)
 fb = Fowardbutton(800,8)
 score = 0
 
-x = 300
+# reads the high score file and records the high score using the variable high_score
+f = open("highscore", "r")
+data = f.readline().strip()
+high_score = int(data) if data else 0
+f.close()
+
+x = 200
 y = 400
 for i in range(5):
     t = Obstacle(x, y)
     obstacles.append(t)
-    x = x + 300
+    x = x + 230
     #y += 100
 
 print(obstacles)
@@ -63,11 +69,13 @@ pygame.mixer.music.play(-1)
 start_game_message = my_font.render("Jump Dash",True,(3, 236, 252))
 choose_sprite_text = my_font.render("Choose your sprite to play with",True,(3, 236, 252))
 music_text = my_font.render("choose your music", True, (3, 236, 252))
-#score_message = my_font2.render("Score" + score, True, ((0, 255, 0))
-loose_message = my_font2.render("YOU LOST", True,(4,26,234))
-geo_message = my_font2.render("Geo Sprite", True, (3, 211, 252))
-bluegeo_message = my_font2.render("Blue Geo Sprite", True, (3, 211, 252))
-scarygeo_message = my_font2.render("Scary Geo Sprite", True, (3, 211, 252))
+score_message = my_font2.render("Score: " + str(score), True, ((0, 255, 0)))
+high_score_message = my_font2.render("Last High score: " + str(high_score),True,(52, 229, 235))
+newrecord_message = my_font2.render("You hit a new Highscore which was: " + str(score),True,(135, 206, 235))
+loose_message = my_font.render("YOU LOST", True,(135, 206, 235))
+geo_message = my_font2.render("Geo Sprite", True, (255, 253, 208))
+bluegeo_message = my_font2.render("Blue Geo Sprite", True, (255, 253, 208))
+scarygeo_message = my_font2.render("Scary Geo Sprite", True, (255, 253, 208))
 
 # -------- Main Program Loop -----------
 
@@ -131,8 +139,8 @@ while choose_sprite:
     screen.blit(bl.image,bl.rect)
     screen.blit(sg.image,sg.rect)
     screen.blit(geo_message,(10, 200))
-    screen.blit(bluegeo_message, (480,200))
-    screen.blit(scarygeo_message,(880,200))
+    screen.blit(bluegeo_message, (445,200))
+    screen.blit(scarygeo_message,(790,200))
     pygame.display.update()
 
     for event in pygame.event.get():  # User did something
@@ -162,7 +170,8 @@ while choose_sprite:
 clock = pygame.time.Clock()
 
 while game:
-    current_time = time.time()
+    if not sprite_collide:
+        current_time = time.time()
     run_time = current_time - start_time
     display_time = my_font2.render("Timer: " + str(round(run_time, 2)), True, (0, 255, 0))
 
@@ -175,15 +184,23 @@ while game:
                     sprite_collide = False
                     sprite_selected.x_position = 0
                     sprite_selected.y_position = 400
-                    start_time = time.time()
+                    score = 0
+                    score_message = my_font2.render("Score: " + str(score), True, ((0, 255, 0)))
 
+                    f = open("highscore", "r")
+                    data = f.readline().strip()
+                    high_score = int(data) if data else 0
+                    f.close()
+                    high_score_message = my_font2.render("Last High score: " + str(high_score), True, (52, 229, 235))
+                    start_time = time.time()
                 else:
                     sprite_selected.jump()
 
     sprite_selected.move_geo()
     sprite_selected.x_position = sprite_selected.x_position + 5
-    if sprite_selected.x_position >= 1000:
+    if sprite_selected.x_position >= 1000 and not sprite_collide:
         score = score + 1
+        score_message = my_font2.render("Score: " + str(score), True, ((0, 255, 0)))
         sprite_selected.x_position = 0
 
 
@@ -195,9 +212,19 @@ while game:
         if not sprite_collide:
             screen.blit(t.image, t.rect)
             screen.blit(display_time, (10, 10))
+            screen.blit(score_message,(10,40))
+            screen.blit(high_score_message, (10,70))
 
     if sprite_collide:
-        screen.blit(loose_message, (230, 10))
+        screen.blit(loose_message, (350, 80))
+        display_time_survived = my_font2.render("You survived for: " + str(round(run_time, 2)) + " seconds", True, (14, 237, 107))
+        screen.blit(display_time_survived,(290,200))
+        if score > high_score:
+            f = open("highscore", "w")
+            f.write(str(score))
+            f.close()
+            newrecord_message = my_font2.render("You hit a new Highscore which was: " + str(score), True,(135, 206, 235))
+            screen.blit(newrecord_message,(260,300))
     else:
         screen.blit(sprite_selected.image, (sprite_selected.x_position, sprite_selected.y_position))
 
