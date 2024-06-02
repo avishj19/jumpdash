@@ -9,7 +9,6 @@ from scarygeo import Scarygeo
 from musicbutton import Muiscbutton
 from classicalbutton import Classicalbutton
 from rapbutton import Rapbutton
-from backbutton import Backbutton
 from fowardbutton import Fowardbutton
 
 # set up pygame modules
@@ -44,7 +43,6 @@ sg = Scarygeo(860,400)
 mb = Muiscbutton(600,200)
 cb = Classicalbutton(100,300)
 rb = Rapbutton(600,330)
-bb = Backbutton(10,10)
 fb = Fowardbutton(800,8)
 score = 0
 
@@ -99,14 +97,12 @@ while game_start_screen:
             if mb.rect.collidepoint(event.pos):
                 game_start_screen = False
                 choose_sprite = False
-                game = False
 
 while chose_music:
     screen.blit(sbg,(0,0))
     screen.blit(music_text,(250,30))
     screen.blit(cb.image,cb.rect)
     screen.blit(rb.image,rb.rect)
-    screen.blit(bb.image,bb.rect)
     screen.blit(fb.image,fb.rect)
     pygame.display.update()
 
@@ -123,10 +119,6 @@ while chose_music:
             if rb.rect.collidepoint(event.pos):
                 backgound_music = pygame.mixer_music.load("rmusic.mp3")
                 pygame.mixer.music.play(-1)
-            if bb.rect.collidepoint(event.pos):
-                game_start_screen = True
-                chose_music = False
-                game_start_screen = True
             if fb.rect.collidepoint(event.pos):
                 chose_music = False
                 choose_sprite = True
