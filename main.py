@@ -30,11 +30,10 @@ g_sprite = False
 s_sprite = False
 sprite_collide = False
 sprite_selected = None
-start_time = time.time()
 
 obstacles = []
 bg = pygame.image.load("background.png")
-sbg = pygame.image.load("../../Downloads/jumpdash-main 5/startscreen.png")
+sbg = pygame.image.load("startscreen.png")
 g = Geo(30,400)
 t = Obstacle(300,400)
 b = Button(320,180)
@@ -54,20 +53,27 @@ f.close()
 
 x = 200
 y = 400
-def reset_obstacles():
+
+def reset_obstacles(score):
     global obstacles
     obstacles = []
     x = 200
     for i in range(4):
         t = Obstacle(x, y)
         obstacles.append(t)
-        x += random.randint(200, 230)
+        if score < 4:
+            x += random.randint(220, 230)
+        elif score >= 4 and score < 7:
+            x += random.randint(200,230)
+        elif score >= 7:
+            x += random.randint(200,220)
+# Distance between obstacles and regenerates it everytime the function is called
 
-reset_obstacles()
+reset_obstacles(score)
 
 print(obstacles)
-backgound_music = pygame.mixer_music.load("rmusic.mp3")
-pygame.mixer.music.play(-1)
+#backgound_music = pygame.mixer_music.load("rmusic.mp3")
+#pygame.mixer.music.play(-1)
 # Render the text later
 start_game_message = my_font.render("Jump Dash",True,(3, 236, 252))
 choose_sprite_text = my_font.render("Choose your sprite to play with",True,(3, 236, 252))
@@ -166,6 +172,7 @@ while choose_sprite:
 
 clock = pygame.time.Clock()
 
+start_time = time.time()
 while game:
     if not sprite_collide:
         current_time = time.time()
@@ -199,7 +206,7 @@ while game:
         score = score + 1
         score_message = my_font2.render("Score: " + str(score), True, ((0, 255, 0)))
         sprite_selected.x_position = 0
-        reset_obstacles()
+        reset_obstacles(score)
 
 
     screen.blit(sbg, (0, 0))  # Background
