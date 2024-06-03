@@ -54,11 +54,16 @@ f.close()
 
 x = 200
 y = 400
-for i in range(5):
-    t = Obstacle(x, y)
-    obstacles.append(t)
-    x = x + 230
-    #y += 100
+def reset_obstacles():
+    global obstacles
+    obstacles = []
+    x = 200
+    for i in range(4):
+        t = Obstacle(x, y)
+        obstacles.append(t)
+        x += random.randint(200, 230)
+
+reset_obstacles()
 
 print(obstacles)
 backgound_music = pygame.mixer_music.load("rmusic.mp3")
@@ -194,6 +199,7 @@ while game:
         score = score + 1
         score_message = my_font2.render("Score: " + str(score), True, ((0, 255, 0)))
         sprite_selected.x_position = 0
+        reset_obstacles()
 
 
     screen.blit(sbg, (0, 0))  # Background
