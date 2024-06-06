@@ -53,6 +53,7 @@ f.close()
 
 x = 200
 y = 400
+# obstacle locations
 
 def reset_obstacles(score):
     global obstacles
@@ -67,13 +68,11 @@ def reset_obstacles(score):
             x += random.randint(200,230)
         elif score >= 7:
             x += random.randint(200,220)
-# Distance between obstacles and regenerates it everytime the function is called
+# Distance between obstacles and regenerates the distance
+# everytime the player finishes the obstacles
 
 reset_obstacles(score)
 
-print(obstacles)
-#backgound_music = pygame.mixer_music.load("rmusic.mp3")
-#pygame.mixer.music.play(-1)
 # Render the text later
 start_game_message = my_font.render("Jump Dash",True,(3, 236, 252))
 choose_sprite_text = my_font.render("Choose your sprite to play with",True,(3, 236, 252))
@@ -94,6 +93,7 @@ while game_start_screen:
     screen.blit(b.image,b.rect)
     screen.blit(mb.image,mb.rect)
     pygame.display.update()
+# User start screen to start the game or if they want to choose play music
 
     for event in pygame.event.get():  # User did something
         if event.type == pygame.QUIT:  # If user clicked close
@@ -108,6 +108,7 @@ while game_start_screen:
             if mb.rect.collidepoint(event.pos):
                 game_start_screen = False
                 choose_sprite = False
+        # checks the button that they pressed
 
 while chose_music:
     screen.blit(sbg,(0,0))
@@ -116,6 +117,8 @@ while chose_music:
     screen.blit(rb.image,rb.rect)
     screen.blit(fb.image,fb.rect)
     pygame.display.update()
+    # if the user presses on music button
+    # it loads the music choices
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -130,9 +133,10 @@ while chose_music:
             if rb.rect.collidepoint(event.pos):
                 backgound_music = pygame.mixer_music.load("rmusic.mp3")
                 pygame.mixer.music.play(-1)
-            if fb.rect.collidepoint(event.pos):
+            if fb.rect.collidepoint(event.pos): # click this button once they choose the music
                 chose_music = False
                 choose_sprite = True
+        # Based on the button they press, the music will play
 
 
 while choose_sprite:
@@ -145,6 +149,8 @@ while choose_sprite:
     screen.blit(bluegeo_message, (445,200))
     screen.blit(scarygeo_message,(790,200))
     pygame.display.update()
+    # options for the sprite they want to choose
+
 
     for event in pygame.event.get():  # User did something
         if event.type == pygame.QUIT:  # If user clicked close
@@ -154,23 +160,22 @@ while choose_sprite:
             game = False
         elif event.type == pygame.MOUSEBUTTONUP:
             if bl.rect.collidepoint(event.pos):
-                #bl_sprite = True
                 sprite_selected = bl
                 sprite_selected.x_position = 10
                 sprite_selected.y_position = 400
                 choose_sprite = False
             if g.rect.collidepoint(event.pos):
-                #g_sprite = True
                 sprite_selected = g
                 choose_sprite = False
             if sg.rect.collidepoint(event.pos):
-                    #s_sprite = True
                     sprite_selected = sg
                     sprite_selected.x_position = 10
                     sprite_selected.y_position = 400
                     choose_sprite = False
+# based on what sprite they click, it sets up the starting position
+# Does this by having a variable that allows for the access of that class
 
-clock = pygame.time.Clock()
+clock = pygame.time.Clock() #Frame rate
 
 start_time = time.time()
 while game:
@@ -178,6 +183,7 @@ while game:
         current_time = time.time()
     run_time = current_time - start_time
     display_time = my_font2.render("Timer: " + str(round(run_time, 2)), True, (0, 255, 0))
+    # Displays a timer for how long the user survived for
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -201,12 +207,14 @@ while game:
                     sprite_selected.jump()
 
     sprite_selected.move_geo()
-    sprite_selected.x_position = sprite_selected.x_position + 5
+    sprite_selected.x_position = sprite_selected.x_position + 5  # moves the sprite
     if sprite_selected.x_position >= 1000 and not sprite_collide:
         score = score + 1
         score_message = my_font2.render("Score: " + str(score), True, ((0, 255, 0)))
         sprite_selected.x_position = 0
         reset_obstacles(score)
+    # rests the sprite to the starting position after it goes through all the obstacles
+    # also increases his score by 1
 
 
     screen.blit(sbg, (0, 0))  # Background
@@ -214,11 +222,14 @@ while game:
     for t in obstacles:
         if sprite_selected.rect.colliderect(t.rect):
             sprite_collide = True
+        # detects collision
         if not sprite_collide:
             screen.blit(t.image, t.rect)
             screen.blit(display_time, (10, 10))
             screen.blit(score_message,(10,40))
             screen.blit(high_score_message, (10,70))
+            screen.blit(sprite_selected.image, (sprite_selected.x_position, sprite_selected.y_position))
+        # Blits the game if the user has not lost
 
     if sprite_collide:
         screen.blit(loose_message, (350, 80))
@@ -230,8 +241,8 @@ while game:
             f.close()
             newrecord_message = my_font2.render("You hit a new Highscore which was: " + str(score), True,(135, 206, 235))
             screen.blit(newrecord_message,(260,300))
-    else:
-        screen.blit(sprite_selected.image, (sprite_selected.x_position, sprite_selected.y_position))
+        # If the user looses, it will show a loose message and how long he survived for
+        # If he has beaten his high score, a message will pop up and will record the high score
 
     pygame.display.update()
     clock.tick(60)
