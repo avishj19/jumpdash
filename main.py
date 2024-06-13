@@ -3,7 +3,7 @@ import random
 import time
 from geo import Geo
 from obstacle import Obstacle
-from button import Button
+from Startbutton import Startbutton
 from bluegeo import Bluegeo
 from scarygeo import Scarygeo
 from musicbutton import Muiscbutton
@@ -36,7 +36,7 @@ bg = pygame.image.load("background.png")
 sbg = pygame.image.load("startscreen.png")
 g = Geo(30,400)
 t = Obstacle(300,400)
-b = Button(320,180)
+b = Startbutton(320,180)
 bl = Bluegeo(480,390)
 sg = Scarygeo(860,400)
 mb = Muiscbutton(600,200)
@@ -128,10 +128,10 @@ while chose_music:
             game = False
         elif event.type == pygame.MOUSEBUTTONUP:
             if cb.rect.collidepoint(event.pos):
-                backgound_music = pygame.mixer_music.load("music.mp3")
+                background_music = pygame.mixer_music.load("music.mp3")
                 pygame.mixer.music.play(-1)
             if rb.rect.collidepoint(event.pos):
-                backgound_music = pygame.mixer_music.load("rmusic.mp3")
+                background_music = pygame.mixer_music.load("rmusic.mp3")
                 pygame.mixer.music.play(-1)
             if fb.rect.collidepoint(event.pos): # click this button once they choose the music
                 chose_music = False
